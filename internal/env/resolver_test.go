@@ -49,3 +49,16 @@ func TestResolve_NonStringField(t *testing.T) {
 		t.Fatal("integer should not cast to string")
 	}
 }
+
+func TestMockClient_ReturnsError(t *testing.T) {
+	// Verify that mockClient propagates a configured error.
+	expected := errors.New("vault unavailable")
+	client := &mockClient{err: expected}
+	_, err := client.GetSecretData("secret/any")
+	if err == nil {
+		t.Fatal("expected error, got nil")
+	}
+	if err.Error() != expected.Error() {
+		t.Fatalf("expected %q, got %q", expected.Error(), err.Error())
+	}
+}
