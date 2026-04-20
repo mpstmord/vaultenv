@@ -57,3 +57,11 @@ func TestEventType_Constants(t *testing.T) {
 		seen[et] = true
 	}
 }
+
+func TestEvent_WithErrorPreservesType(t *testing.T) {
+	ev := NewEvent(EventSecretFetch).WithError(errors.New("permission denied"))
+
+	if ev.Type != EventSecretFetch {
+		t.Errorf("expected type %q to be preserved after WithError, got %q", EventSecretFetch, ev.Type)
+	}
+}
