@@ -62,6 +62,17 @@ func TestRender_LookupError(t *testing.T) {
 	}
 }
 
+func TestRender_EmptyString(t *testing.T) {
+	r := NewRenderer(fixedLookup(nil))
+	out, err := r.Render("")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if out != "" {
+		t.Errorf("expected empty string, got %q", out)
+	}
+}
+
 func TestRenderFile_Success(t *testing.T) {
 	dir := t.TempDir()
 	p := filepath.Join(dir, "tmpl.txt")
