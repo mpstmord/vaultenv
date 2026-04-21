@@ -49,3 +49,14 @@ func (c *Comparer) Compare(prev, next map[string]string) []Change {
 func (c *Comparer) HasChanges(prev, next map[string]string) bool {
 	return len(c.Compare(prev, next)) > 0
 }
+
+// FilterByType returns only the changes that match the given ChangeType.
+func (c *Comparer) FilterByType(changes []Change, t ChangeType) []Change {
+	var filtered []Change
+	for _, ch := range changes {
+		if ch.Type == t {
+			filtered = append(filtered, ch)
+		}
+	}
+	return filtered
+}
