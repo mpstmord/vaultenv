@@ -65,3 +65,17 @@ func TestEvent_WithErrorPreservesType(t *testing.T) {
 		t.Errorf("expected type %q to be preserved after WithError, got %q", EventSecretFetch, ev.Type)
 	}
 }
+
+func TestEvent_WithErrorChaining(t *testing.T) {
+	// Verify that calling WithError twice uses the most recent error.
+	ev := NewEvent(EventSecretFetch).
+		WithError(errors.New("first error")).
+		WithError(errors.New("second error"))
+
+	if ev.Error != "second error" {
+		t.Errorf("expected last error %q, got %q", "second error", ev.Error)
+	}
+	if ev.Success {
+		t.Error("expected Success to be false after chained WithError")
+	}
+}
