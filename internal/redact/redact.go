@@ -41,10 +41,16 @@ func (r *Redactor) ScrubMap(env map[string]string) map[string]string {
 }
 
 // Add appends additional secret values to the redactor at runtime.
+// Empty strings are silently ignored.
 func (r *Redactor) Add(secrets ...string) {
 	for _, s := range secrets {
 		if s != "" {
 			r.secrets = append(r.secrets, s)
 		}
 	}
+}
+
+// Len returns the number of secret values currently tracked by the Redactor.
+func (r *Redactor) Len() int {
+	return len(r.secrets)
 }
