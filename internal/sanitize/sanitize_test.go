@@ -94,3 +94,24 @@ func TestEnvPair_EmptyValue(t *testing.T) {
 		t.Error("expected error for empty value, got nil")
 	}
 }
+
+// TestEnvKey_Idempotent verifies that running EnvKey on an already-sanitized
+// key produces the same result, ensuring the function is safe to call multiple times.
+func TestEnvKey_Idempotent(t *testing.T) {
+	inputs := []string{"FOO", "MY_VAR_1", "_PRIVATE"}
+	for _, input := range inputs {
+		t.Run(input, func(t *testing.T) {
+			first, err := sanitize.EnvKey(input)
+			if err != nil {
+				t.Fatalf("first call unexpected error: %v", err)
+			}
+			second, err := sanitize.EnvKey(first)
+			if err != nil {
+				t.Fatalf("second call unexpected error: %v", err)
+			}
+			if first != second {
+				t.Errorf("EnvKey not idempotent: first=%q, second=%q", first, second)
+			}
+		})
+	}
+}
