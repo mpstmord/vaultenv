@@ -9,4 +9,18 @@
 //		{Path: "secret/db", Field: "password"},
 //		{Path: "secret/api", Field: "key"},
 //	})
+//
+// Each Result in the returned slice corresponds positionally to the input
+// Request slice. Callers should check Result.Err before using Result.Value:
+//
+//	for i, r := range results {
+//		if r.Err != nil {
+//			log.Printf("failed to fetch %s: %v", results[i].Path, r.Err)
+//			continue
+//		}
+//		fmt.Println(r.Value)
+//	}
+//
+// The worker pool size passed to New controls the maximum number of concurrent
+// requests made to Vault. A value of 0 defaults to runtime.NumCPU().
 package batch
